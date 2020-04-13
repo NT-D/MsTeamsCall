@@ -17,6 +17,8 @@ namespace CseSample
         private readonly IConfidentialClientApplication _confidentialClient;
         public CallFunction(IConfidentialClientApplication confidentialClient)
         {
+            // Utilize dependency injection
+            // https://docs.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection
             _confidentialClient = confidentialClient;
         }
 

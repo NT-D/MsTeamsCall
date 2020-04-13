@@ -20,6 +20,8 @@ namespace CseSample
         // https://docs.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            // For handling connection well, we utilize Singleton life time
+            // https://github.com/Azure/azure-functions-host/wiki/Managing-Connections
             builder.Services.AddSingleton((s) =>
             {
                 return CreateIdentityClient();

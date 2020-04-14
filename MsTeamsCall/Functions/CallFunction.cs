@@ -14,12 +14,12 @@ namespace CseSample
 {
     public class CallFunction
     {
-        private readonly IConfidentialClientApplication _confidentialClient;
-        public CallFunction(IConfidentialClientApplication confidentialClient)
+        private readonly ITokenService _tokenService;
+        public CallFunction(ITokenService tokenService)
         {
             // Utilize dependency injection
             // https://docs.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection
-            _confidentialClient = confidentialClient;
+            _tokenService = tokenService;
         }
 
         [FunctionName("CallFunction")]
@@ -29,14 +29,17 @@ namespace CseSample
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            // We'll utilize token in the future PR
-            var result = await _confidentialClient.AcquireTokenForClient(new List<string>() { "https://graph.microsoft.com/.default" }).ExecuteAsync();
-
-            string responseMessage = string.IsNullOrEmpty(result.AccessToken)
-                ? "Failed"
-                : $"{result.AccessToken}";
-
-            return new OkObjectResult(responseMessage);
+            try
+            {
+                // TODO: Will specify tenant id
+                string accessToken = await _tokenService.FetchAccessTokenByTenantId("willUpdateWithTenantId");
+                return new OkObjectResult(accessToken);
+            }
+            catch(Exception ex)
+            {
+                log.LogError(ex.Message);
+                throw;
+            }
         }
     }
 }

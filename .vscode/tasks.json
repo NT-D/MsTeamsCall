@@ -76,6 +76,25 @@
 			"command": "host start",
 			"isBackground": true,
 			"problemMatcher": "$func-watch"
+		},
+		{
+			"label": "Test with coverage report",
+			"type": "process",
+			"command" : "dotnet",
+			"args": [
+				"test",
+				"MsTeamsCall.sln",
+				"/p:CollectCoverage=true",
+				"/p:CoverletOutput=\"./coverage/lcov.info\"",
+				"/p:CoverletOutputFormat=lcov",
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
 		}
 	]
 }

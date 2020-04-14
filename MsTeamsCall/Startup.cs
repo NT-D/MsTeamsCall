@@ -26,6 +26,7 @@ namespace CseSample
             {
                 return CreateIdentityClient();
             });
+            builder.Services.AddSingleton<ITokenService, TokenService>();
         }
 
         private IConfidentialClientApplication CreateIdentityClient()

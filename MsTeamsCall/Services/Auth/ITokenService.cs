@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace CseSample
+namespace CseSample.Services
 {
     public interface ITokenService
     {

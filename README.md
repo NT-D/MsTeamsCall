@@ -51,9 +51,11 @@ TODO: Will update detailed steps. I'll create wiki and refer it from here
 1. Install [Visual Studio Code](https://code.visualstudio.com/)
 1. Clone repository and open with Visual Studio Code. If you get recommendation to install dependencies (extension and cli), please install them.
 1. Update `local.settings.json` with copied `Client Id`, `Client Secret` and `Tenant Id`.
+1. Setup Azure Bot Service and enable Teams feature
 1. Setup ngrok for accepting webhook from Microsoft Graph (wiki)
 1. Press [F5] key to run Azure Functions locally.
 1. TODO: Update information how to call API (Don't have API now)
+
 
 # Consideration for productions
 TODO: Will write up about Key-Vault, multi-tenant related information here.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CseSample.Utils;
 using Microsoft.Graph;
 
 namespace CseSample.Services
@@ -30,7 +31,7 @@ namespace CseSample.Services
 
             try
             {
-                var requestHeaders = CreateRequestHeader(accessToken);
+                var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
                 var batchResult = await _graphClient.Batch.Request(requestHeaders).PostAsync(batchContent).ConfigureAwait(false);
                 var batchResultContent = await batchResult.GetResponsesAsync();
 
@@ -54,11 +55,6 @@ namespace CseSample.Services
             {
                 throw;
             }
-        }
-
-        private List<HeaderOption> CreateRequestHeader(string accessToken)
-        {
-            return new List<HeaderOption>() { new HeaderOption("Authorization", $"Bearer {accessToken}") };
         }
     }
 }

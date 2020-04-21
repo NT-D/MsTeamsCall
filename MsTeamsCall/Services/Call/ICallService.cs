@@ -4,6 +4,6 @@ namespace CseSample.Services
 {
     public interface ICallService
     {
-        Task<bool> startGroupCallWithSpecificMembers(string[] userIds, string tenantId, string accessToken);
+        Task<bool> StartGroupCallWithSpecificMembers(string[] userIds, string tenantId, string accessToken);
     }
 }

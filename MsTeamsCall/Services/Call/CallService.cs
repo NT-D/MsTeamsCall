@@ -16,12 +16,12 @@ namespace CseSample.Services
             _graphClient = graphClient;
         }
 
-        public async Task<bool> startGroupCallWithSpecificMembers(string[] userIds, string tenantId, string accessToken)
+        public async Task<bool> StartGroupCallWithSpecificMembers(string[] userIds, string tenantId, string accessToken)
         {
             try
             {
                 var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
-                Call callRequest = createGroupCallRequest(userIds, tenantId);
+                Call callRequest = CreateGroupCallRequest(userIds, tenantId);
                 await _graphClient.Communications.Calls.Request(requestHeaders).AddAsync(callRequest);
 
                 return true;
@@ -32,7 +32,7 @@ namespace CseSample.Services
             }
         }
 
-        private Call createGroupCallRequest(string[] userIds, string tenantId)
+        private Call CreateGroupCallRequest(string[] userIds, string tenantId)
         {
             Call callRequest = new Call();
             callRequest.TenantId = tenantId;

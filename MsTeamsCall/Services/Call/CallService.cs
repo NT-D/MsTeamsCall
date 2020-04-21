@@ -9,10 +9,9 @@ namespace CseSample.Services
 {
     public class CallService : ICallService
     {
-        private readonly ITokenService _tokenService;
         private readonly IGraphServiceClient _graphClient;
 
-        public CallService(ITokenService tokenService, IGraphServiceClient graphClient)
+        public CallService(IGraphServiceClient graphClient)
         {
             _graphClient = graphClient;
         }

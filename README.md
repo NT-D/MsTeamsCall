@@ -39,7 +39,7 @@ You can see detailed sequence diagrams in wiki.
 ### Authorization flow
 - [OAuth 2.0 client credential flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow): Because our app is worker/deamon type service and can't have user interaction, we need to utilize client credential flow to fetch access token for Microsoft Graph.
 
-# How to setup environment
+# How to setup environment and run application
 TODO: Will update detailed steps. I'll create wiki and refer it from here
 
 1. Create your Microsoft 365 environment with [developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program).
@@ -56,6 +56,13 @@ TODO: Will update detailed steps. I'll create wiki and refer it from here
 1. Press [F5] key to run Azure Functions locally.
 1. TODO: Update information how to call API (Don't have API now)
 
+## How to run test
+In this section, we assume you've finished previous section to setup dev environment.
+1. Open project with Visual Studio Code
+1. Ctrl+Shift+P(windows)/Command+ShiftP(Mac) to show command pallet.
+1. Select `Tasks:Run test tasks` to run test
+
+You can see test results and coverage in the VS Code terminal. If you've installed [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) extension, you can see code covered inline by clicking [Watch] button.
 
 # Consideration for productions
 TODO: Will write up about Key-Vault, multi-tenant related information here.

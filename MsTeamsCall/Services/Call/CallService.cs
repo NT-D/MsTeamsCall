@@ -44,7 +44,7 @@ namespace CseSample.Services
             {
                 Identity = new IdentitySet()
                 {
-                    Application = new Identity(){Id = Environment.GetEnvironmentVariable("ClientId")}
+                    Application = new Identity() { Id = Environment.GetEnvironmentVariable("ClientId") }
                 }
             };
 
@@ -63,6 +63,51 @@ namespace CseSample.Services
             callRequest.Targets = targets;
             Console.WriteLine(JsonConvert.SerializeObject(callRequest));
 
+            return callRequest;
+        }
+
+        public async Task<bool> JoinExistingOnlineMeeting(string userId, Meeting meetingInfo, string accessToken)
+        {
+            try
+            {
+                var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
+                Call joinMeetingRequest = this.CreateJoinCallRequest(userId, meetingInfo);
+                await _graphClient.Communications.Calls.Request(requestHeaders).AddAsync(joinMeetingRequest);
+
+                return true;
+            }
+            catch (ServiceException ex)
+            {
+                throw;
+            }
+        }
+
+        private Call CreateJoinCallRequest(string userId, Meeting meetingInfo)
+        {
+            Call callRequest = new Call();
+            callRequest.TenantId = meetingInfo.TenantId;
+            callRequest.CallbackUri = "https://bing.com"; // TODO: Need to update correct call back url
+            callRequest.RequestedModalities = new Modality[] { Modality.Audio };
+            callRequest.MediaConfig = new ServiceHostedMediaConfig();
+            callRequest.ChatInfo = new ChatInfo()
+            {
+                ThreadId = meetingInfo.ThreadId,
+                MessageId = meetingInfo.MessageId
+            };
+            callRequest.MeetingInfo = new OrganizerMeetingInfo()
+            {
+                Organizer = new IdentitySet()
+                {
+                    User = new Identity()
+                    {
+                        Id = userId,
+                        AdditionalData = new Dictionary<string, object>() { { "tenantId", meetingInfo.TenantId } }
+                    }
+                },
+                AdditionalData = new Dictionary<string, object>() { { "allowConversationWithoutHost", true } }
+            };
+
+            var test = JsonConvert.SerializeObject(callRequest);
             return callRequest;
         }
     }

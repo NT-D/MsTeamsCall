@@ -3,6 +3,9 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client;
+using Microsoft.Graph;
+using System.Threading.Tasks;
+using CseSample.Services;
 
 [assembly: FunctionsStartup(typeof(CseSample.Startup))]
 namespace CseSample
@@ -27,6 +30,9 @@ namespace CseSample
                 return CreateIdentityClient();
             });
             builder.Services.AddSingleton<ITokenService, TokenService>();
+            builder.Services.AddSingleton<IGraphServiceClient>(new GraphServiceClient(new DelegateAuthenticationProvider(da => Task.FromResult(0))));
+            builder.Services.AddScoped<ICallService, CallService>();
+            builder.Services.AddScoped<IUsersService, UsersService>();
         }
 
         private IConfidentialClientApplication CreateIdentityClient()
@@ -40,9 +46,13 @@ namespace CseSample
                                           .WithClientSecret(clientSecret)
                                           .Build();
             }
+            catch (MsalClientException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                throw;
+            }
             catch (Exception)
             {
-                Console.Error.WriteLine("Please input ClientId and Client Secret in your local.settings.json");
                 throw;
             }
         }

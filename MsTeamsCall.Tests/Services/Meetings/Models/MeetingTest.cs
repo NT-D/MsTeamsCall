@@ -12,7 +12,6 @@ namespace CseSample.Tests.Services
                 new Attendee() { EmailAddress = new EmailAddress() { Address = "user1@test.com" } },
                 new Attendee() { EmailAddress = new EmailAddress() { Address = "user2@test.com" } }
         };
-        private string _encodedMeetingUrlSample = "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDM5ZTM1MjUtZTViMi00ODRhLTgzMWQtMmVlNmIwNzY2OGY1%40thread.v2/0?context=%7b%22Tid%22%3a%22b21a0d16-4e90-4cdb-a05b-ad3846369881%22%2c%22Oid%22%3a%22ea7140cd-bced-4bdf-931b-06cc30891bb8%22%7d";
         OnlineMeetingInfo _onlineMeetinginfo;
 
         private string _threadId = "19:meeting_NDM5ZTM1MjUtZTViMi00ODRhLTgzMWQtMmVlNmIwNzY2OGY1@thread.v2";
@@ -22,7 +21,7 @@ namespace CseSample.Tests.Services
 
         public MeetingTest()
         {
-            _onlineMeetinginfo = new OnlineMeetingInfo() { JoinUrl = _encodedMeetingUrlSample };
+            _onlineMeetinginfo = new OnlineMeetingInfo() { JoinUrl = SharedSettings.EncodedMeetingUrlSample };
         }
 
         [Fact]

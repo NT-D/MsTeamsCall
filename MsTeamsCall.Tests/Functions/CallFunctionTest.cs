@@ -36,7 +36,7 @@ namespace MsTeamsCall.Tests
                 .ReturnsAsync(true);
 
 
-            var callFunction = new CallFunction(tokenServiceMock.Object, userServiceMock.Object, callServiceMock.Object);
+            var callFunction = new CallFunction(tokenServiceMock.Object, userServiceMock.Object, callServiceMock.Object, new Mock<IMeetingService>().Object);
 
             // Act
             var result = await callFunction.Calls(this.CreateHttpRequest().Object, new Mock<ILogger>().Object);
@@ -53,7 +53,7 @@ namespace MsTeamsCall.Tests
             tokenServiceMock.Setup(t => t.FetchAccessTokenByTenantId(It.IsAny<string>()))
                 .ThrowsAsync(new Exception());
 
-            var callFunction = new CallFunction(tokenServiceMock.Object, new Mock<IUsersService>().Object, new Mock<ICallService>().Object);
+            var callFunction = new CallFunction(tokenServiceMock.Object, new Mock<IUsersService>().Object, new Mock<ICallService>().Object, new Mock<IMeetingService>().Object);
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(async () => await callFunction.Calls(this.CreateHttpRequest().Object, new Mock<ILogger>().Object));
@@ -64,10 +64,10 @@ namespace MsTeamsCall.Tests
         {
             // Arrange
             var tokenServiceMock = new Mock<ITokenService>();
-            var callFunction = new CallFunction(new Mock<ITokenService>().Object, new Mock<IUsersService>().Object, new Mock<ICallService>().Object);
+            var callFunction = new CallFunction(new Mock<ITokenService>().Object, new Mock<IUsersService>().Object, new Mock<ICallService>().Object, new Mock<IMeetingService>().Object);
 
             // Act
-            var result =  await callFunction.Calls(this.UnexpecterdHttpRequest().Object, new Mock<ILogger>().Object);
+            var result = await callFunction.Calls(this.UnexpecterdHttpRequest().Object, new Mock<ILogger>().Object);
 
             // Assert
             Assert.IsType<BadRequestResult>(result);

@@ -5,7 +5,8 @@
       "FUNCTIONS_WORKER_RUNTIME": "dotnet",
       "ClientId":"Insert your client id",
       "ClientSecret":"Insert your client secret",
-      "TenantId": "Insert your tenantId"
+      "TenantId": "Insert your tenantId",
+      "CallBackUrl": "Insert your callback url"
     }
   }
   

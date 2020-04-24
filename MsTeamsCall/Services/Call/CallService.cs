@@ -86,7 +86,7 @@ namespace CseSample.Services
         {
             Call callRequest = new Call();
             callRequest.TenantId = meetingInfo.TenantId;
-            callRequest.CallbackUri = "https://bing.com"; // TODO: Need to update correct call back url
+            callRequest.CallbackUri = $"{Settings.CallBackEndpoint}/api/callback?userId={userId}&tenantId={meetingInfo.TenantId}";
             callRequest.RequestedModalities = new Modality[] { Modality.Audio };
             callRequest.MediaConfig = new ServiceHostedMediaConfig();
             callRequest.ChatInfo = new ChatInfo()
@@ -109,6 +109,37 @@ namespace CseSample.Services
 
             var test = JsonConvert.SerializeObject(callRequest);
             return callRequest;
+        }
+
+        public async Task<bool> InviteUserToOnlineMeeting(string userId, string tenantId, string callId, string accessToken)
+        {
+            try
+            {
+                var participants = CreateParticipant();
+                var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
+                await _graphClient.Communications.Calls[callId].Participants.Invite(participants).Request(requestHeaders).PostAsync();
+
+                return true;
+            }
+            catch (ServiceException)
+            {
+                throw;
+            }
+
+            InvitationParticipantInfo[] CreateParticipant()
+            {
+                var participantInfo = new InvitationParticipantInfo();
+                participantInfo.Identity = new IdentitySet()
+                {
+                    User = new Identity()
+                    {
+                        Id = userId,
+                        AdditionalData = new Dictionary<string, object>() { { "tenantId", tenantId } }
+                    }
+                };
+
+                return new InvitationParticipantInfo[] { participantInfo };
+            }
         }
     }
 }

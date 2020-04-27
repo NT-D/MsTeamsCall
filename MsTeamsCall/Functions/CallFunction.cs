@@ -88,5 +88,40 @@ namespace CseSample
                 throw;
             }
         }
+
+        [FunctionName(nameof(HandleCallBack))]
+        public async Task<IActionResult> HandleCallBack(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "callback")] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string userId = req.Query["userId"];
+            string tenantId = req.Query["tenantId"];
+            // In general we need to return 400 error in this situation, but MS Graph doens't change action, so we just finish process by sending OKResult
+            if (String.IsNullOrEmpty(userId) || String.IsNullOrEmpty(tenantId)) return new OkResult();
+
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                // Notification change data model depending on type of notification.
+                // CallCallback is our expected one. If the model is invalid, we don't need to take any action: Go to catch
+                var callBackNotifications = JsonConvert.DeserializeObject<CallCallback>(requestBody);
+                foreach (var notification in callBackNotifications.Value)
+                {
+                    if (!notification.IsValidEstablishedNotification(tenantId)) break;
+
+                    string accessToken = await _tokenService.FetchAccessTokenByTenantId(tenantId);
+                    await _callService.InviteUserToOnlineMeeting(userId, tenantId, notification.CallId, accessToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                // Don't throw exception becasue MS Graph can't change action based on our Internal Server Exception
+            }
+
+            return new OkResult();
+        }
     }
 }

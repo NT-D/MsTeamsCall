@@ -6,7 +6,7 @@
       "ClientId":"Insert your client id",
       "ClientSecret":"Insert your client secret",
       "TenantId": "Insert your tenantId",
-      "CallBackUrl": "Insert your callback url"
+      "CallBackUrl": "Insert your callback url. During local development, you can utilize ngrok"
     }
   }
   

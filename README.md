@@ -12,14 +12,11 @@ A user can get group call from your app.
 
 ![demo](./document/demo.png)
 
-
 # Technical consideration
 We uses following language and tools. As prerequistics, please read and try each tools tutorial.
 
 ## Architecture
-TODO: Create architecture diagram with Azure components.
-TOOD: Create wiki for describing sequrnece.
-You can see detailed sequence diagrams in wiki.
+![Architecture](./document/Arc.png)
 
 ## Language, SDK and utilities
 ### Programming language

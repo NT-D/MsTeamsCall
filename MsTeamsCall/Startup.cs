@@ -33,6 +33,7 @@ namespace CseSample
             builder.Services.AddSingleton<IGraphServiceClient>(new GraphServiceClient(new DelegateAuthenticationProvider(da => Task.FromResult(0))));
             builder.Services.AddScoped<ICallService, CallService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
+            builder.Services.AddScoped<IMeetingService, MeetingService>();
         }
 
         private IConfidentialClientApplication CreateIdentityClient()

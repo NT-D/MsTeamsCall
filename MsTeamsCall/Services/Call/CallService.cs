@@ -44,7 +44,7 @@ namespace CseSample.Services
             {
                 Identity = new IdentitySet()
                 {
-                    Application = new Identity(){Id = Environment.GetEnvironmentVariable("ClientId")}
+                    Application = new Identity() { Id = Environment.GetEnvironmentVariable("ClientId") }
                 }
             };
 
@@ -64,6 +64,82 @@ namespace CseSample.Services
             Console.WriteLine(JsonConvert.SerializeObject(callRequest));
 
             return callRequest;
+        }
+
+        public async Task<bool> JoinExistingOnlineMeeting(string userId, Meeting meetingInfo, string accessToken)
+        {
+            try
+            {
+                var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
+                Call joinMeetingRequest = this.CreateJoinCallRequest(userId, meetingInfo);
+                await _graphClient.Communications.Calls.Request(requestHeaders).AddAsync(joinMeetingRequest);
+
+                return true;
+            }
+            catch (ServiceException ex)
+            {
+                throw;
+            }
+        }
+
+        private Call CreateJoinCallRequest(string userId, Meeting meetingInfo)
+        {
+            Call callRequest = new Call();
+            callRequest.TenantId = meetingInfo.TenantId;
+            callRequest.CallbackUri = $"{Settings.CallBackEndpoint}/api/callback?userId={userId}&tenantId={meetingInfo.TenantId}";
+            callRequest.RequestedModalities = new Modality[] { Modality.Audio };
+            callRequest.MediaConfig = new ServiceHostedMediaConfig();
+            callRequest.ChatInfo = new ChatInfo()
+            {
+                ThreadId = meetingInfo.ThreadId,
+                MessageId = meetingInfo.MessageId
+            };
+            callRequest.MeetingInfo = new OrganizerMeetingInfo()
+            {
+                Organizer = new IdentitySet()
+                {
+                    User = new Identity()
+                    {
+                        Id = userId,
+                        AdditionalData = new Dictionary<string, object>() { { "tenantId", meetingInfo.TenantId } }
+                    }
+                },
+                AdditionalData = new Dictionary<string, object>() { { "allowConversationWithoutHost", true } }
+            };
+
+            var test = JsonConvert.SerializeObject(callRequest);
+            return callRequest;
+        }
+
+        public async Task<bool> InviteUserToOnlineMeeting(string userId, string tenantId, string callId, string accessToken)
+        {
+            try
+            {
+                var participants = CreateParticipant();
+                var requestHeaders = AuthUtil.CreateRequestHeader(accessToken);
+                await _graphClient.Communications.Calls[callId].Participants.Invite(participants).Request(requestHeaders).PostAsync();
+
+                return true;
+            }
+            catch (ServiceException)
+            {
+                throw;
+            }
+
+            InvitationParticipantInfo[] CreateParticipant()
+            {
+                var participantInfo = new InvitationParticipantInfo();
+                participantInfo.Identity = new IdentitySet()
+                {
+                    User = new Identity()
+                    {
+                        Id = userId,
+                        AdditionalData = new Dictionary<string, object>() { { "tenantId", tenantId } }
+                    }
+                };
+
+                return new InvitationParticipantInfo[] { participantInfo };
+            }
         }
     }
 }

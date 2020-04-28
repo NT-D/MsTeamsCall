@@ -44,7 +44,7 @@ namespace CseSample
                 string accessToken = await _tokenService.FetchAccessTokenByTenantId(callRequest.TenantId);
                 string[] userIds = await _usersService.GetUserIdsFromEmailAsync(callRequest.ParticipantEmails, accessToken);
                 await _callService.StartGroupCallWithSpecificMembers(userIds, callRequest.TenantId, accessToken).ConfigureAwait(false);
-                return new OkObjectResult("test");
+                return new OkResult(); // TODO: Should change to 201
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace CseSample
                     await _callService.StartGroupCallWithSpecificMembers(attendeesIds, meetingCallRequest.TenantId, accessToken).ConfigureAwait(false);
                 }
 
-                return new OkObjectResult("test");
+                return new OkResult(); // TODO: Should change to 201
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace CseSample
                 // Don't throw exception becasue MS Graph can't change action based on our Internal Server Exception
             }
 
-            return new OkResult();
+            return new OkResult(); // TODO: Should change to 201
         }
     }
 }

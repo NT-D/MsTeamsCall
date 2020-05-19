@@ -40,7 +40,7 @@ We uses following language and tools. As prerequistics, please read and try each
    - Client Id
    - Client Secret
    - Tenant Id
-1. Setup the app permission in Azure AD [(wiki)](https://github.com/NT-D/MsTeamsCall/wiki/MS-Graph-permission-list)
+1. Setup the app permission in Azure AD [(link)](./document/Permissions)
 1. Install [Visual Studio Code](https://code.visualstudio.com/)
 1. Clone repository and open with Visual Studio Code. If you get recommendation to install dependencies (extension and cli), please install them.
 1. Copy `local.settings.sample.json` and paste as `local.settings.json` in same path.
